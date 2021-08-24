@@ -24,6 +24,8 @@ const install = (Vue, vm) => {
 		// 方式一，存放在vuex的token，假设使用了uView封装的vuex方式
 		// 见：https://uviewui.com/components/globalVariable.html
 		// config.header.token = vm.token;
+		
+		config.header.Authorization = 'Bearer '+vm.vuex_token;
 
 		// 方式二，如果没有使用uView封装的vuex方法，那么需要使用$store.state获取
 		// config.header.token = vm.$store.state.token;
@@ -35,7 +37,7 @@ const install = (Vue, vm) => {
 		// 所以哪怕您重新登录修改了Storage，下一次的请求将会是最新值
 		// const token = uni.getStorageSync('token');
 		// config.header.token = token;
-		config.header.Token = 'xxxxxx';
+		// config.header.Token = 'xxxxxx';
 
 		// 可以对某个url进行特别处理，此url参数为this.$u.get(url)中的url值
 		if (config.url == '/user/login') config.header.noToken = true;
@@ -48,7 +50,8 @@ const install = (Vue, vm) => {
 	// 响应拦截，判断状态码是否通过
 	Vue.prototype.$u.http.interceptor.response = (res) => {
 		const {
-			statusCode,data
+			statusCode,
+			data
 		} = res
 		if (statusCode < 400) {
 			// res为服务端返回值，可能有code，result等字段
@@ -56,12 +59,15 @@ const install = (Vue, vm) => {
 			// 如果配置了originalData为true，请留意这里的返回值
 			return data;
 		} else if (statusCode == 401) {
-			// 假设201为token失效，这里跳转登录
-			vm.$u.toast('验证失败，请重新登录');
-			setTimeout(() => {
-				// 此为uView的方法，详见路由相关文档
-				vm.$u.route('/pages/user/login')
-			}, 1500)
+			// 认证未通过，或者token过期
+			// 假设201为token失效，这里跳转登录、
+			if (data.message == "Unauthorized") {
+				vm.$u.toast('账号或者密码错误');
+			} else {
+				//如果请求了需要登录api
+				vm.$u.utils.isLogin()
+			}
+
 			return false;
 		} else {
 			// 如果返回false，则会调用Promise的reject回调，
@@ -70,14 +76,14 @@ const install = (Vue, vm) => {
 		}
 	}
 
-    //增加patch请求
-	vm.$u.patch=(url,params={},header={})=>{
+	//增加patch请求
+	vm.$u.patch = (url, params = {}, header = {}) => {
 		//模拟patch请求
-		const _params={
+		const _params = {
 			...params,
-			_method:'patch'
+			_method: 'patch'
 		}
-		return vm.$u.post(url,_params,header)
+		return vm.$u.post(url, _params, header)
 	}
 }
 

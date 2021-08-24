@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-个人中心
+		个人中心
 	</view>
 </template>
 
@@ -12,7 +12,9 @@
 			}
 		},
 		onLoad() {
-
+			if(!this.$u.utils.isLogin()) return
+			// 
+			console.log('sss')
 		},
 		methods: {
 
