@@ -33,24 +33,35 @@
 			}
 		},
 		methods: {
-		async	submit() {
+			async submit() {
 				if (!this.$u.test.email(this.email) || !this.password) return
 
 				const params = {
 					email: this.email,
 					password: this.password,
-					
+
 				}
 				//执行登录
-				const loginRes= await this.$u.api.authLogin(params)
-				
+				const loginRes = await this.$u.api.authLogin(params)
+
 				//存token
-				this.$u.vuex('vuex_token',loginRes.access_token)
+				this.$u.vuex('vuex_token', loginRes.access_token)
 				//请求用户信息
-				const userInfo=await this.$u.api.userInfo()
+				const userInfo = await this.$u.api.userInfo()
+				this.$u.toast('登录成功')
 				//缓存用户信息
-					this.$u.vuex('vuex_user',userInfo)
-				console.log(loginRes,userInfo)
+				this.$u.vuex('vuex_user', userInfo)
+				// 登录后，跳转来源页面
+
+				const backUrl = uni.getStorageSync('back_url') || 'pages/index/index'
+				setTimeout(() => {
+					this.$u.route({
+						type: "reLaunch",
+						url: backUrl
+					})
+				}, 1500)
+
+
 			}
 		}
 	};

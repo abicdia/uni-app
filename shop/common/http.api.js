@@ -8,13 +8,14 @@
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
 const install = (Vue, vm) => {
 	// 此处使用了传入的params参数，一切自定义即可
-	vm.$u.api={}
+	vm.$u.api = {}
 	//首页
 	vm.$u.api.index = (params = {}) => vm.$u.get('/api/index', params);
 
 	//认证
-	vm.$u.api.authLogin = (params = {}) => vm.$u.post('/api/auth/login', params);
-	
+	vm.$u.api.authLogin = (params = {}) => vm.$u.post('/api/auth/login', params); //登录
+	vm.$u.api.authRegister = (params = {}) => vm.$u.post('/api/auth/register', params); //注册
+
 	//用户
 	//用户详情
 	vm.$u.api.userInfo = (params = {}) => vm.$u.get('/api/user');
