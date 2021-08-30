@@ -85,6 +85,16 @@ const install = (Vue, vm) => {
 		}
 		return vm.$u.post(url, _params, header)
 	}
+	
+	//增加put请求
+	vm.$u.put = (url, params = {}, header = {}) => {
+		//模拟patch请求
+		const _params = {
+			...params,
+			_method: 'put'
+		}
+		return vm.$u.post(url, _params, header)
+	}
 }
 
 export default {

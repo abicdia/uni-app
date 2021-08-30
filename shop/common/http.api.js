@@ -15,10 +15,14 @@ const install = (Vue, vm) => {
 	//认证
 	vm.$u.api.authLogin = (params = {}) => vm.$u.post('/api/auth/login', params); //登录
 	vm.$u.api.authRegister = (params = {}) => vm.$u.post('/api/auth/register', params); //注册
+	vm.$u.api.authLogout = (params = {}) => vm.$u.post('/api/auth/logout', params); //退出登录
+	vm.$u.api.authOSSToken = (params = {}) => vm.$u.get('/api/auth/oss/token'); //OSS Token
 
 	//用户
 	//用户详情
-	vm.$u.api.userInfo = (params = {}) => vm.$u.get('/api/user');
+	vm.$u.api.userInfo = (params = {}) => vm.$u.get('/api/user'); //用户详情
+	vm.$u.api.userInfoUpdata = (params = {}) => vm.$u.put('/api/user', params); //修改用户信息
+	vm.$u.api.userAvatar = (params = {}) => vm.$u.patch('/api/user/avatar', params); //更新头像
 
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
 	// vm.$u.api = {

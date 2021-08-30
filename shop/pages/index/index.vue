@@ -44,16 +44,6 @@
 			}
 		},
 		async onLoad() {
-			const currentPage = getCurrentPages().pop();
-			const options = currentPage.options;
-			const optionsKeys = Object.keys(options)
-			let params = ''
-			if (optionsKeys.length !== 0) {
-				params = optionsKeys.reduce((pre, cur) => {
-					return pre + cur + '=' + options[cur] + '&'
-				}, "?").slice(0,-1)
-			}
-			console.log(params);
 			this.getlist()
 		},
 		onReachBottom() {
